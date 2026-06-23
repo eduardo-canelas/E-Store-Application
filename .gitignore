@@ -1,0 +1,14 @@
+# Compiled Java class files
+*.class
+
+# Mobile/Desktop build directories and logs
+*.log
+*.tmp
+*.temp
+
+# graphify outputs
+graphify-out/
+
+# OS-specific files
+.DS_Store
+Thumbs.db

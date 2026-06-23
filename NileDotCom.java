@@ -3,15 +3,6 @@ Name: Eduardo Canelas
 Course: CNT 4714 – Summer 2025
 Assignment title: Project 1 – An Event-driven Enterprise Simulation
 Date: Sunday June 1, 2025
-
-UI/UX: brutalist-editorial restyle inspired by mill3.studio — warm paper
-canvas, hard-bordered flat blocks (sharp corners), high-contrast serif
-display type (Times Now / Georgia), grotesk UI text, monospace numbered
-micro-labels, and the signature acid-lime (#C0FF0D) accent with full-pill
-buttons that invert on hover. Zero external dependencies (pure Swing,
-custom-painted). All original business rules preserved: quantity discount
-tiers (5/10/15 -> 10/15/20%), max 5 line items, 6% sales tax, and
-append-only transactions.csv logging.
 */
 
 import javax.swing.*;

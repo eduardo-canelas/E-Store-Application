@@ -105,37 +105,12 @@ The application comes with a diverse inventory of 45+ items including:
 -   **Data Persistence**: Automatic transaction logging with unique ID generation
 -   **Memory Management**: Efficient ArrayList and HashMap usage
 
-## 🎨 Demo Screenshots
-
-_Add screenshots here to showcase your application's interface_
-
-## 🔮 Future Enhancements
-
--   **Database Integration**: Migration from CSV to SQL database
--   **User Authentication**: Customer login and profile management
--   **Enhanced UI**: Modern look and feel with custom themes
--   **Reporting Dashboard**: Sales analytics and inventory reports
--   **Web Version**: Spring Boot REST API with React frontend
-
-## 📈 Performance Metrics
-
--   **Response Time**: < 100ms for all operations
--   **Memory Usage**: Optimized for minimal heap consumption
--   **Scalability**: Supports 1000+ inventory items efficiently
-
-## 🤝 Contributing
-
-This is an educational project, but suggestions and improvements are welcome!
-
 ## 📧 Contact
 
 **Eduardo Canelas**
 
--   LinkedIn: [Your LinkedIn Profile]
 -   GitHub: [eduardo-canelas](https://github.com/eduardo-canelas)
--   Email: [Your Email]
 
 ---
 
-*This project showcases practical application of Java programming concepts, GUI development, and software engineering principles in an enterprise simulation environment.*E-Store-Application
-Java application that creates a standalone GUI application that simulates an e-store. We’ll call our store Nile Dot Com... we’re not quite as big as Amazon.com!1 The application will allow the user to place in stock items into a shopping cart and once all items are included, total all costs (including tax).
+*This project showcases practical application of Java programming concepts, GUI development, and software engineering principles in an enterprise simulation environment.*
