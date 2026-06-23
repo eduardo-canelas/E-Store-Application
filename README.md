@@ -1,116 +1,113 @@
-# 🛒 Nile Dot Com - E-Commerce Simulation Application
+# Nile dot com - E-Store
 
-[![Java](https://img.shields.io/badge/Java-17+-orange.svg)](https://www.oracle.com/java/)
-[![Swing GUI](https://img.shields.io/badge/GUI-Java%20Swing-blue.svg)](https://docs.oracle.com/javase/tutorial/uiswing/)
-[![License](https://img.shields.io/badge/License-Educational-green.svg)]()
+[![CI](https://github.com/eduardo-canelas/E-Store-Application/actions/workflows/ci.yml/badge.svg)](https://github.com/eduardo-canelas/E-Store-Application/actions/workflows/ci.yml)
+[![Java](https://img.shields.io/badge/Java-17-orange.svg)](https://adoptium.net/)
+[![Build](https://img.shields.io/badge/build-Gradle-02303A.svg)](https://gradle.org/)
+[![Tests](https://img.shields.io/badge/tests-JUnit_5-25A162.svg)](https://junit.org/junit5/)
 
-A sophisticated **Java Swing desktop application** that simulates a complete e-commerce shopping experience. Built as part of CNT 4714 coursework, this application demonstrates advanced GUI programming, file I/O operations, and business logic implementation.
+A Java Swing desktop storefront built on a clean, tested architecture: an
+extracted domain layer, a repository-backed embedded SQLite store, natural
+language catalogue search, and a custom-painted, theming UI. Originally a
+single-file CNT 4714 assignment, rebuilt into a production-shaped application.
 
-## 🌟 Key Features
+The interface is a mill3.studio-inspired brutalist-editorial system: warm paper
+canvas, hard ink borders, serif display type, mono micro-labels, a single
+acid-lime accent, and full-pill buttons that invert on hover - with a one-click
+dark mode.
 
-### 💼 **Business Logic**
+## Highlights
 
--   **Smart Inventory Management**: Real-time stock validation with quantity limits
--   **Dynamic Pricing System**: Automatic quantity-based discounts (10%, 15%, 20%)
--   **Transaction Processing**: Complete checkout with tax calculations (6% sales tax)
--   **Shopping Cart**: Support for up to 5 items with add/remove functionality
+- **Layered architecture** - business rules live in `com.nilecom.domain`, isolated
+  from Swing and from storage, so they are unit-tested directly.
+- **Repository pattern over SQLite** - `InventoryRepository` / `OrderRepository`
+  interfaces backed by embedded SQLite (xerial sqlite-jdbc); the CSV catalogue is
+  imported as a first-run seed.
+- **Natural language search** - type "cheap usb cable under $10"; the query parser
+  extracts price bounds, a sort hint, and keyword terms, then filters the catalogue.
+  Deterministic, dependency-free, fully tested.
+- **Catalogue browser** - search or browse all products, click a result to open a
+  detail view with a live, quantity-driven price and bulk-discount preview.
+- **Inline receipt** - checkout renders an itemized, perforated paper receipt in
+  place (no modal), with PNG export and printing.
+- **Order history** - every checkout is persisted and replayable from an in-app
+  history view.
+- **Light / dark theming** - semantic design tokens flip the entire UI on toggle.
+- **Tested + CI** - JUnit 5 across domain, search, and persistence; JaCoCo
+  coverage gate (>=80% on the tested layers); GitHub Actions on every push.
 
-### 🎨 **User Experience**
+## Quick start
 
--   **Intuitive GUI**: Clean Java Swing interface with responsive design
--   **Real-time Validation**: Instant feedback for stock availability and input errors
--   **Transaction History**: Persistent storage of all completed purchases
--   **Professional Invoicing**: Detailed receipts with timestamps and transaction IDs
+Requires JDK 17+. The Gradle wrapper is committed, so no local Gradle install is
+needed.
 
-### 🔧 **Technical Implementation**
+```bash
+# build, run tests, verify coverage
+./gradlew build
 
--   **File-based Database**: CSV inventory management system
--   **Event-driven Architecture**: Comprehensive button state management
--   **Error Handling**: Robust validation for all user inputs
--   **Data Persistence**: Automatic transaction logging with timestamps
+# launch the app
+./gradlew run
 
-## 🚀 Quick Start
+# or build a self-contained runnable jar and run it
+./gradlew fatJar
+java -jar build/libs/nile-dot-com-2.0.0-all.jar
+```
 
-### Prerequisites
+Convenience launchers: `./run.sh` (macOS/Linux) and `run.bat` (Windows).
 
--   Java 8 or higher installed on your system
--   Terminal/Command Prompt access
+## Using it
 
-### Installation & Usage
+1. **Find a product** - type a natural-language query ("cheap cable under $10") and
+   Search, or Browse all.
+2. **Open a result** - click any product to see details; set a quantity and watch
+   the line total and bulk discount update live.
+3. **Add to cart** - up to 5 line items; bulk discounts apply automatically
+   (5+ -> 10%, 10+ -> 15%, 15+ -> 20%).
+4. **Checkout** - generates an inline receipt (6% sales tax), saves the order, and
+   appends to `transactions.csv`. Export the receipt as PNG or print it.
+5. **History** - reopen any past order from the History view.
 
-1. **Clone the repository**
+## Architecture
 
-    ```bash
-    git clone https://github.com/eduardo-canelas/E-Store-Application.git
-    cd E-Store-Application
-    ```
+```
+com.nilecom
+├── App                       composition root (boots SQLite, seeds, launches UI)
+├── domain                    pure business logic (no Swing, no SQL)
+│   ├── Product, CartItem, Cart, Order
+│   └── Pricing               discount tiers + tax
+├── search
+│   └── NaturalLanguageSearch query parsing + filtering
+├── persistence               repository pattern
+│   ├── InventoryRepository / OrderRepository      (interfaces)
+│   ├── SqliteDatabase, SqliteInventoryRepository, SqliteOrderRepository
+│   ├── CsvInventoryImporter  (seed import)
+│   └── CsvTransactionLog     (append-only audit trail)
+└── ui
+    ├── NileDotCom            custom-painted Swing storefront
+    └── Theme                 light/dark semantic design tokens
+```
 
-2. **Compile the application**
+Business logic depends only on interfaces, so storage is swappable and the rules
+are testable in isolation - the layering the original single-file version only
+claimed to have.
 
-    ```bash
-    javac NileDotCom.java
-    ```
+## Testing
 
-3. **Run the application**
-    ```bash
-    java NileDotCom
-    ```
+```bash
+./gradlew test                 # run the suite
+open build/reports/tests/test/index.html
+./gradlew jacocoTestReport     # coverage
+open build/reports/jacoco/test/html/index.html
+```
 
-### 🎯 **How to Use**
+Covered: pricing tiers and boundaries, cart capacity and money math, the search
+query parser, CSV import edge cases, and SQLite repository round-trips
+(seed/find/save/reload).
 
-1. **Search Products**: Enter an Item ID and quantity, then click "Search For Item"
-2. **Add to Cart**: After finding a product, click "Add Item To Cart"
-3. **Manage Cart**: Use "Delete Last Item" to remove items or "Empty Cart" to clear all
-4. **Checkout**: Click "Check Out" to complete your purchase and generate an invoice
-5. **View History**: Check `transactions.csv` for purchase history
+## Tech
 
-## 📊 Sample Inventory
+Java 17, Swing (custom 2D painting, zero UI dependencies), SQLite (xerial
+sqlite-jdbc), Gradle, JUnit 5, JaCoCo, GitHub Actions.
 
-The application comes with a diverse inventory of 45+ items including:
+## Author
 
--   **Electronics**: USB cables, ink cartridges, desk fans
--   **Office Supplies**: Staplers, screwdrivers, index cards
--   **Accessories**: Helmets, sunglasses, calendars
--   **And much more!**
-
-## 🏗️ Architecture & Design Patterns
-
-### **Model-View-Controller (MVC) Inspired Design**
-
--   **Model**: Inventory and transaction data management
--   **View**: Java Swing GUI components
--   **Controller**: Event listeners and business logic
-
-### **Key Components**
-
--   `NileDotCom.java`: Main application class with GUI and business logic
--   `inventory.csv`: Product database with pricing and availability
--   `transactions.csv`: Transaction history and audit trail
--   `FileReaderTest.java`: Utility class for file operations
-
-## 💡 Technical Highlights
-
-### **Skills Demonstrated**
-
--   **Java Swing GUI Development**: Complex layout management and component interaction
--   **File I/O Operations**: CSV reading/writing with proper error handling
--   **Event-Driven Programming**: Comprehensive action listeners and state management
--   **Data Validation**: Input sanitization and business rule enforcement
--   **Object-Oriented Design**: Clean class structure with proper encapsulation
-
-### **Advanced Features**
-
--   **Dynamic Discount Calculation**: Quantity-based pricing algorithms
--   **State Management**: Smart button enabling/disabling based on application state
--   **Data Persistence**: Automatic transaction logging with unique ID generation
--   **Memory Management**: Efficient ArrayList and HashMap usage
-
-## 📧 Contact
-
-**Eduardo Canelas**
-
--   GitHub: [eduardo-canelas](https://github.com/eduardo-canelas)
-
----
-
-*This project showcases practical application of Java programming concepts, GUI development, and software engineering principles in an enterprise simulation environment.*
+Eduardo Canelas - [github.com/eduardo-canelas](https://github.com/eduardo-canelas)

@@ -1,6 +1,7 @@
 plugins {
     id 'java'
     id 'application'
+    id 'jacoco'
 }
 
 group = 'com.nilecom'
@@ -37,7 +38,37 @@ test {
     testLogging {
         events 'passed', 'skipped', 'failed'
     }
+    finalizedBy jacocoTestReport
 }
+
+jacocoTestReport {
+    dependsOn test
+    reports {
+        xml.required = true
+        html.required = true
+    }
+}
+
+// The Swing UI (com.nilecom.ui) and the composition root (App) are exercised by
+// offscreen render checks, not JUnit — so coverage is enforced only on the pure,
+// testable layers (domain, search, persistence).
+def coveredPackages = ['com/nilecom/domain/**', 'com/nilecom/search/**', 'com/nilecom/persistence/**']
+jacocoTestCoverageVerification {
+    afterEvaluate {
+        classDirectories.setFrom(files(classDirectories.files.collect {
+            fileTree(dir: it, includes: coveredPackages)
+        }))
+    }
+    violationRules {
+        rule {
+            limit {
+                counter = 'INSTRUCTION'
+                minimum = 0.80
+            }
+        }
+    }
+}
+check.dependsOn jacocoTestCoverageVerification
 
 // Fat jar so the app is double-click runnable: `java -jar build/libs/nile-dot-com-all.jar`
 tasks.register('fatJar', Jar) {

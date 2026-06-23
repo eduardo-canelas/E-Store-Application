@@ -1,7 +1,16 @@
 # Compiled Java class files
 *.class
 
-# Mobile/Desktop build directories and logs
+# Gradle
+.gradle/
+build/
+
+# Local store + runtime artifacts
+*.db
+.nilecom/
+transactions.csv
+
+# Logs / temp
 *.log
 *.tmp
 *.temp
