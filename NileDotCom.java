@@ -433,8 +433,8 @@ public class NileDotCom extends JFrame {
 
         cart.clear();
         refreshCart();
-        renderEmptyDetail();
-        new InvoiceDialog(this, txId, timestamp, snapshot, sub, tax, total).setVisible(true);
+        renderReceipt(txId, timestamp, snapshot, sub, tax, total);
+        toast("Order placed — receipt ready.", Toast.SUCCESS);
     }
 
     private double subtotal() {
@@ -547,6 +547,179 @@ public class NileDotCom extends JFrame {
         detailHost.add(p, BorderLayout.NORTH);
         detailHost.revalidate();
         detailHost.repaint();
+    }
+
+    /** Inline post-checkout receipt — itemized paper slip, rendered in place. */
+    private void renderReceipt(String txId, String date, List<CartItem> items,
+                              double sub, double tax, double total) {
+        detailHost.removeAll();
+
+        JPanel p = new JPanel();
+        p.setOpaque(false);
+        p.setLayout(new BoxLayout(p, BoxLayout.Y_AXIS));
+
+        p.add(eyebrow("03 / RECEIPT"));
+        p.add(Box.createVerticalStrut(10));
+
+        JPanel headRow = new JPanel();
+        headRow.setOpaque(false);
+        headRow.setLayout(new BoxLayout(headRow, BoxLayout.X_AXIS));
+        headRow.setAlignmentX(LEFT_ALIGNMENT);
+        headRow.setMaximumSize(new Dimension(Integer.MAX_VALUE, 34));
+        JComponent check = new JComponent() {
+            public Dimension getPreferredSize() { return new Dimension(30, 30); }
+            public Dimension getMaximumSize() { return new Dimension(30, 30); }
+            protected void paintComponent(Graphics g) {
+                Graphics2D g2 = aa(g);
+                g2.setColor(LIME);
+                g2.fillRect(0, 0, 30, 30);
+                g2.setColor(INK);
+                g2.setStroke(new BasicStroke(2.6f, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND));
+                g2.drawLine(8, 16, 13, 21);
+                g2.drawLine(13, 21, 23, 9);
+            }
+        };
+        JPanel checkWrap = new JPanel(new GridBagLayout());
+        checkWrap.setOpaque(false);
+        checkWrap.setMaximumSize(new Dimension(30, 34));
+        checkWrap.add(check);
+        headRow.add(checkWrap);
+        headRow.add(Box.createHorizontalStrut(12));
+        JLabel h = new JLabel("Order confirmed");
+        h.setFont(tracked(serif(Font.BOLD, 24), -0.025f));
+        h.setForeground(INK);
+        JPanel hWrap = new JPanel(new GridBagLayout());
+        hWrap.setOpaque(false);
+        hWrap.add(h);
+        headRow.add(hWrap);
+        headRow.add(Box.createHorizontalGlue());
+        p.add(headRow);
+        p.add(Box.createVerticalStrut(8));
+
+        JLabel meta = new JLabel("TXN " + txId + "  ·  " + date);
+        meta.setFont(tracked(mono(Font.PLAIN, 10.5f), 0.06f));
+        meta.setForeground(MUTED);
+        meta.setAlignmentX(LEFT_ALIGNMENT);
+        p.add(meta);
+        p.add(Box.createVerticalStrut(18));
+
+        ReceiptSlip slip = new ReceiptSlip();
+        JLabel store = new JLabel("NILE DOT COM · PREMIUM E-STORE");
+        store.setFont(tracked(mono(Font.PLAIN, 9.5f), 0.14f));
+        store.setForeground(MUTED);
+        store.setAlignmentX(LEFT_ALIGNMENT);
+        slip.add(store);
+        slip.add(Box.createVerticalStrut(12));
+        slip.add(new Divider());
+        slip.add(Box.createVerticalStrut(12));
+        for (int i = 0; i < items.size(); i++) {
+            slip.add(receiptItemRow(items.get(i)));
+            if (i < items.size() - 1) slip.add(Box.createVerticalStrut(10));
+        }
+        slip.add(Box.createVerticalStrut(14));
+        slip.add(new Divider());
+        slip.add(Box.createVerticalStrut(12));
+        slip.add(receiptTotal("Subtotal", MONEY.format(sub), false));
+        slip.add(Box.createVerticalStrut(7));
+        slip.add(receiptTotal("Sales tax (6%)", MONEY.format(tax), false));
+        slip.add(Box.createVerticalStrut(12));
+        slip.add(new HardRule());
+        slip.add(Box.createVerticalStrut(12));
+        slip.add(receiptTotal("Total paid", MONEY.format(total), true));
+        p.add(slip);
+
+        double savedAmt = 0;
+        for (CartItem it : items) savedAmt += it.price * it.qty - it.lineTotal();
+        if (savedAmt > 0) {
+            p.add(Box.createVerticalStrut(12));
+            JLabel sv = new JLabel("You saved " + MONEY.format(savedAmt) + " with bulk pricing");
+            sv.setFont(font(Font.BOLD, 12));
+            sv.setForeground(new Color(0x2E, 0x7D, 0x32));
+            sv.setAlignmentX(LEFT_ALIGNMENT);
+            p.add(sv);
+        }
+        p.add(Box.createVerticalStrut(10));
+        JLabel note = new JLabel("RECEIPT APPENDED TO TRANSACTIONS.CSV");
+        note.setFont(tracked(mono(Font.PLAIN, 9), 0.1f));
+        note.setForeground(FAINT);
+        note.setAlignmentX(LEFT_ALIGNMENT);
+        p.add(note);
+        p.add(Box.createVerticalStrut(20));
+
+        RoundButton again = new RoundButton("Start new order →", RoundButton.LIME);
+        again.setFullWidth(true);
+        again.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) { renderEmptyDetail(); }
+        });
+        p.add(again);
+
+        JPanel holder = new JPanel(new BorderLayout());
+        holder.setOpaque(false);
+        holder.add(p, BorderLayout.NORTH);
+        JScrollPane sc = new JScrollPane(holder,
+                JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
+                JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+        sc.setBorder(null);
+        sc.setOpaque(false);
+        sc.getViewport().setOpaque(false);
+        sc.getVerticalScrollBar().setUnitIncrement(16);
+        styleScrollBar(sc.getVerticalScrollBar());
+        detailHost.add(sc, BorderLayout.CENTER);
+        detailHost.revalidate();
+        detailHost.repaint();
+    }
+
+    private JComponent receiptItemRow(CartItem it) {
+        JPanel r = new JPanel(new BorderLayout(10, 0));
+        r.setOpaque(false);
+        r.setAlignmentX(LEFT_ALIGNMENT);
+        r.setMaximumSize(new Dimension(Integer.MAX_VALUE, 42));
+
+        JPanel mid = new JPanel();
+        mid.setOpaque(false);
+        mid.setLayout(new BoxLayout(mid, BoxLayout.Y_AXIS));
+        JLabel name = new JLabel(it.qty + " × " + clip(it.desc, 28));
+        name.setFont(font(Font.BOLD, 13.5f));
+        name.setForeground(INK);
+        name.setAlignmentX(LEFT_ALIGNMENT);
+        String m = MONEY.format(it.price) + " each"
+                + (it.discount > 0 ? "   ·   −" + (int) Math.round(it.discount * 100) + "%" : "");
+        JLabel mlab = new JLabel(m);
+        mlab.setFont(tracked(mono(Font.PLAIN, 10), 0.04f));
+        mlab.setForeground(MUTED);
+        mlab.setAlignmentX(LEFT_ALIGNMENT);
+        mid.add(name);
+        mid.add(Box.createVerticalStrut(3));
+        mid.add(mlab);
+        r.add(mid, BorderLayout.CENTER);
+
+        JLabel tot = new JLabel(MONEY.format(it.lineTotal()));
+        tot.setFont(tracked(mono(Font.BOLD, 13.5f), 0.02f));
+        tot.setForeground(INK);
+        JPanel tw = new JPanel(new GridBagLayout());
+        tw.setOpaque(false);
+        tw.add(tot);
+        r.add(tw, BorderLayout.EAST);
+        return r;
+    }
+
+    private JComponent receiptTotal(String label, String value, boolean strong) {
+        JPanel r = new JPanel(new BorderLayout());
+        r.setOpaque(false);
+        r.setAlignmentX(LEFT_ALIGNMENT);
+        r.setMaximumSize(new Dimension(Integer.MAX_VALUE, strong ? 40 : 22));
+        JLabel l = new JLabel(label);
+        JLabel v = new JLabel(value);
+        if (strong) {
+            l.setFont(tracked(serif(Font.BOLD, 19), -0.01f)); l.setForeground(INK);
+            v.setFont(tracked(serif(Font.BOLD, 24), -0.02f)); v.setForeground(INK);
+        } else {
+            l.setFont(font(Font.PLAIN, 12.5f)); l.setForeground(MUTED);
+            v.setFont(tracked(mono(Font.BOLD, 12.5f), 0.02f)); v.setForeground(INK);
+        }
+        r.add(l, BorderLayout.WEST);
+        r.add(v, BorderLayout.EAST);
+        return r;
     }
 
     private JComponent emptyState(String title, String sub) {
@@ -663,6 +836,43 @@ public class NileDotCom extends JFrame {
             g2.setColor(INK);
             g2.setStroke(new BasicStroke(1.5f));
             g2.drawRect(0, 0, w - 1, h - 1);
+            super.paintComponent(g);
+        }
+    }
+
+    /** Receipt slip — white paper, hard border, perforated bottom edge. */
+    static class ReceiptSlip extends JPanel {
+        ReceiptSlip() {
+            setOpaque(false);
+            setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+            setBorder(new EmptyBorder(18, 18, 24, 18));
+            setAlignmentX(LEFT_ALIGNMENT);
+        }
+        public Dimension getMaximumSize() {
+            return new Dimension(Integer.MAX_VALUE, super.getPreferredSize().height);
+        }
+        protected void paintComponent(Graphics g) {
+            Graphics2D g2 = aa(g);
+            int w = getWidth(), h = getHeight();
+            int tooth = 12;
+            int baseY = h - 9;
+            java.awt.geom.Path2D.Float path = new java.awt.geom.Path2D.Float();
+            path.moveTo(0, 0);
+            path.lineTo(w - 1, 0);
+            path.lineTo(w - 1, baseY);
+            float x = w - 1;
+            while (x > 0) {
+                path.lineTo(x - tooth / 2f, baseY + 7);
+                path.lineTo(x - tooth, baseY);
+                x -= tooth;
+            }
+            path.lineTo(0, baseY);
+            path.closePath();
+            g2.setColor(Color.WHITE);
+            g2.fill(path);
+            g2.setColor(INK);
+            g2.setStroke(new BasicStroke(1.4f));
+            g2.draw(path);
             super.paintComponent(g);
         }
     }
@@ -1033,149 +1243,6 @@ public class NileDotCom extends JFrame {
             });
             out.setRepeats(false);
             out.start();
-        }
-    }
-
-    /** Order-confirmation dialog — paper block, serif heading, lime accent. */
-    static class InvoiceDialog extends JDialog {
-        InvoiceDialog(JFrame owner, String txId, String date, List<CartItem> items,
-                      double sub, double tax, double total) {
-            super(owner, true);
-            setUndecorated(true);
-            JPanel card = new JPanel() {
-                protected void paintComponent(Graphics g) {
-                    Graphics2D g2 = aa(g);
-                    g2.setColor(PAPER);
-                    g2.fillRect(0, 0, getWidth(), getHeight());
-                    g2.setColor(INK);
-                    g2.setStroke(new BasicStroke(2f));
-                    g2.drawRect(1, 1, getWidth() - 3, getHeight() - 3);
-                    g2.setColor(LIME);
-                    g2.fillRect(1, 1, getWidth() - 3, 6);
-                }
-            };
-            card.setOpaque(true);
-            card.setLayout(new BoxLayout(card, BoxLayout.Y_AXIS));
-            card.setBorder(new EmptyBorder(34, 36, 30, 36));
-
-            JLabel kick = new JLabel("ORDER CONFIRMED");
-            kick.setFont(tracked(mono(Font.PLAIN, 10.5f), 0.16f));
-            kick.setForeground(MUTED);
-            kick.setAlignmentX(CENTER_ALIGNMENT);
-            card.add(kick);
-            card.add(Box.createVerticalStrut(10));
-
-            JComponent check = new JComponent() {
-                public Dimension getPreferredSize() { return new Dimension(58, 58); }
-                public Dimension getMaximumSize() { return new Dimension(58, 58); }
-                protected void paintComponent(Graphics g) {
-                    Graphics2D g2 = aa(g);
-                    g2.setColor(LIME);
-                    g2.fillRect(0, 0, 58, 58);
-                    g2.setColor(INK);
-                    g2.setStroke(new BasicStroke(4f, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND));
-                    g2.drawLine(16, 30, 26, 40);
-                    g2.drawLine(26, 40, 43, 19);
-                }
-            };
-            check.setAlignmentX(CENTER_ALIGNMENT);
-            card.add(check);
-            card.add(Box.createVerticalStrut(14));
-
-            JLabel title = new JLabel("Thank you for your order");
-            title.setFont(tracked(serif(Font.BOLD, 24), -0.02f));
-            title.setForeground(INK);
-            title.setAlignmentX(CENTER_ALIGNMENT);
-            card.add(title);
-            card.add(Box.createVerticalStrut(6));
-
-            JLabel meta = new JLabel("TXN " + txId + "   ·   " + date);
-            meta.setFont(tracked(mono(Font.PLAIN, 10), 0.06f));
-            meta.setForeground(MUTED);
-            meta.setAlignmentX(CENTER_ALIGNMENT);
-            card.add(meta);
-            card.add(Box.createVerticalStrut(20));
-
-            JPanel lines = new JPanel();
-            lines.setOpaque(false);
-            lines.setLayout(new BoxLayout(lines, BoxLayout.Y_AXIS));
-            lines.setAlignmentX(CENTER_ALIGNMENT);
-            lines.setBorder(new EmptyBorder(16, 18, 10, 18));
-            lines.setMaximumSize(new Dimension(460, Integer.MAX_VALUE));
-            for (CartItem it : items) {
-                JPanel r = new JPanel(new BorderLayout());
-                r.setOpaque(false);
-                r.setMaximumSize(new Dimension(Integer.MAX_VALUE, 26));
-                JLabel l = new JLabel(it.qty + " × " + clip(it.desc, 28));
-                l.setFont(font(Font.PLAIN, 13));
-                l.setForeground(INK_SOFT);
-                JLabel v = new JLabel(MONEY.format(it.lineTotal()));
-                v.setFont(font(Font.BOLD, 13));
-                v.setForeground(INK);
-                r.add(l, BorderLayout.WEST);
-                r.add(v, BorderLayout.EAST);
-                lines.add(r);
-                lines.add(Box.createVerticalStrut(6));
-            }
-            JPanel linesWrap = new JPanel(new BorderLayout()) {
-                protected void paintComponent(Graphics g) {
-                    Graphics2D g2 = aa(g);
-                    g2.setColor(Color.WHITE);
-                    g2.fillRect(0, 0, getWidth(), getHeight());
-                    g2.setColor(INK);
-                    g2.setStroke(new BasicStroke(1.3f));
-                    g2.drawRect(0, 0, getWidth() - 1, getHeight() - 1);
-                }
-            };
-            linesWrap.setOpaque(false);
-            linesWrap.setAlignmentX(CENTER_ALIGNMENT);
-            linesWrap.setMaximumSize(new Dimension(460, Integer.MAX_VALUE));
-            linesWrap.add(lines, BorderLayout.CENTER);
-            card.add(linesWrap);
-            card.add(Box.createVerticalStrut(16));
-
-            card.add(totalLine("Subtotal", MONEY.format(sub), false));
-            card.add(Box.createVerticalStrut(6));
-            card.add(totalLine("Sales tax (6%)", MONEY.format(tax), false));
-            card.add(Box.createVerticalStrut(10));
-            card.add(totalLine("Total paid", MONEY.format(total), true));
-            card.add(Box.createVerticalStrut(8));
-
-            JLabel saved = new JLabel("RECEIPT APPENDED TO TRANSACTIONS.CSV");
-            saved.setFont(tracked(mono(Font.PLAIN, 9), 0.1f));
-            saved.setForeground(FAINT);
-            saved.setAlignmentX(CENTER_ALIGNMENT);
-            card.add(saved);
-            card.add(Box.createVerticalStrut(20));
-
-            RoundButton done = new RoundButton("Done", RoundButton.INK);
-            done.setFullWidth(true);
-            done.addActionListener(new ActionListener() {
-                public void actionPerformed(ActionEvent e) { dispose(); }
-            });
-            done.setMaximumSize(new Dimension(460, 50));
-            done.setAlignmentX(CENTER_ALIGNMENT);
-            card.add(done);
-
-            setContentPane(card);
-            pack();
-            setSize(new Dimension(Math.max(460, getWidth()), getHeight()));
-            setLocationRelativeTo(owner);
-        }
-        private JComponent totalLine(String label, String value, boolean strong) {
-            JPanel r = new JPanel(new BorderLayout());
-            r.setOpaque(false);
-            r.setAlignmentX(CENTER_ALIGNMENT);
-            r.setMaximumSize(new Dimension(460, strong ? 34 : 22));
-            JLabel l = new JLabel(label);
-            if (strong) { l.setFont(tracked(serif(Font.BOLD, 18), -0.01f)); l.setForeground(INK); }
-            else { l.setFont(font(Font.PLAIN, 13)); l.setForeground(MUTED); }
-            JLabel v = new JLabel(value);
-            v.setFont(strong ? tracked(serif(Font.BOLD, 22), -0.02f) : font(Font.BOLD, 13));
-            v.setForeground(INK);
-            r.add(l, BorderLayout.WEST);
-            r.add(v, BorderLayout.EAST);
-            return r;
         }
     }
 
