@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.nilecom.search.NaturalLanguageSearchTest" tests="6" skipped="0" failures="0" errors="0" timestamp="2026-06-23T05:22:13" hostname="Eduardos-MacBook-Pro.local" time="0.004">
+  <properties/>
+  <testcase name="bareDollarAmountTreatedAsMax()" classname="com.nilecom.search.NaturalLanguageSearchTest" time="0.001"/>
+  <testcase name="cheapSortsAscending()" classname="com.nilecom.search.NaturalLanguageSearchTest" time="0.0"/>
+  <testcase name="parsesOverPriceConstraint()" classname="com.nilecom.search.NaturalLanguageSearchTest" time="0.001"/>
+  <testcase name="parsesUnderPriceConstraint()" classname="com.nilecom.search.NaturalLanguageSearchTest" time="0.0"/>
+  <testcase name="filtersByPriceAndTerms()" classname="com.nilecom.search.NaturalLanguageSearchTest" time="0.001"/>
+  <testcase name="emptyQueryReturnsEverything()" classname="com.nilecom.search.NaturalLanguageSearchTest" time="0.0"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>
