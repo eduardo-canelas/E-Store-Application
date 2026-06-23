@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Nile dot com — Java Swing E-Store · Eduardo Canelas</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%23C0FF0D'/%3E%3Ctext x='50' y='74' font-family='Georgia,serif' font-size='72' font-weight='600' text-anchor='middle' fill='%230E0E0C'%3EN%3C/text%3E%3C/svg%3E" />
+<meta name="description" content="A Java Swing desktop storefront rebuilt on a layered, tested architecture: extracted domain logic, a repository-backed embedded SQLite store, natural-language catalogue search, and a custom-painted theming UI." />
+<meta property="og:title" content="Nile dot com — Java Swing E-Store" />
+<meta property="og:description" content="From a single-file class assignment to a production-shaped, tested desktop application." />
+<meta property="og:type" content="website" />
+<meta property="og:image" content="./shots/results.png" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Space+Grotesk:wght@400;500;600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
+<style>
+  :root{
+    --paper:#F4F1E8;
+    --surface:#FBFAF5;
+    --ink:#0E0E0C;
+    --soft:#3A382F;
+    --muted:#6E6B5E;
+    --line:#0E0E0C;
+    --hair:rgba(14,14,12,0.12);
+    --lime:#C0FF0D;
+    --radius:16px;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{
+    background:var(--paper);
+    color:var(--ink);
+    font-family:'Space Grotesk',system-ui,sans-serif;
+    font-size:17px;line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+    overflow-x:hidden;
+  }
+  .wrap{max-width:1180px;margin:0 auto;padding:0 28px}
+  .mono{font-family:'Space Mono',monospace;text-transform:uppercase;letter-spacing:.14em;font-size:12px;color:var(--muted)}
+  .serif{font-family:'Fraunces',Georgia,serif;font-weight:500;line-height:1.04;letter-spacing:-0.01em}
+  a{color:inherit}
+
+  /* header */
+  header{position:sticky;top:0;z-index:50;background:var(--ink);color:var(--paper);border-bottom:3px solid var(--lime)}
+  .nav{display:flex;align-items:center;justify-content:space-between;height:72px}
+  .brand{display:flex;align-items:center;gap:14px}
+  .logo{width:42px;height:42px;background:var(--lime);color:var(--ink);display:grid;place-items:center;font-family:'Fraunces',serif;font-weight:600;font-size:24px}
+  .brand .k{font-family:'Space Mono',monospace;font-size:11px;letter-spacing:.16em;color:var(--lime);display:block;margin-bottom:2px}
+  .brand .n{font-family:'Fraunces',serif;font-size:22px;font-weight:500}
+  .nav-actions{display:flex;gap:10px}
+  .pill{display:inline-flex;align-items:center;gap:8px;border:1.5px solid var(--paper);border-radius:999px;padding:9px 18px;font-size:13px;font-weight:500;text-decoration:none;transition:all .18s ease;white-space:nowrap}
+  .pill:hover{background:var(--paper);color:var(--ink)}
+  .pill.lime{background:var(--lime);border-color:var(--lime);color:var(--ink)}
+  .pill.lime:hover{background:transparent;color:var(--paper);border-color:var(--lime)}
+
+  /* hero */
+  .hero{padding:90px 0 56px}
+  .kicker{margin-bottom:22px}
+  h1.title{font-size:clamp(44px,8vw,104px)}
+  h1.title em{font-style:normal;color:transparent;-webkit-text-stroke:1.5px var(--ink)}
+  .mark{background:var(--lime);padding:0 .12em;color:var(--ink);-webkit-text-stroke:0}
+  .lede{max-width:60ch;margin:30px 0 34px;font-size:clamp(18px,2.4vw,21px);color:var(--soft)}
+  .hero-cta{display:flex;gap:14px;flex-wrap:wrap;align-items:center}
+  .btn{display:inline-flex;align-items:center;gap:9px;text-decoration:none;border-radius:999px;padding:14px 26px;font-weight:600;font-size:15px;border:1.5px solid var(--ink);transition:transform .14s ease,background .18s ease,color .18s ease}
+  .btn:active{transform:translateY(1px)}
+  .btn.solid{background:var(--ink);color:var(--paper)}
+  .btn.solid:hover{background:var(--lime);color:var(--ink);border-color:var(--lime)}
+  .btn.ghost:hover{background:var(--ink);color:var(--paper)}
+  .note{font-family:'Space Mono',monospace;font-size:12px;color:var(--muted);margin-left:4px}
+
+  /* big shot */
+  .shot{border:2.5px solid var(--line);border-radius:var(--radius);overflow:hidden;background:var(--surface);box-shadow:14px 14px 0 rgba(14,14,12,0.9)}
+  .shot img{display:block;width:100%;height:auto}
+  .hero-shot{margin-top:18px}
+  figcaption{font-family:'Space Mono',monospace;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-top:14px}
+
+  /* facts */
+  .facts{display:grid;grid-template-columns:repeat(4,1fr);gap:0;border:2px solid var(--line);border-radius:var(--radius);margin:70px 0 0;overflow:hidden;background:var(--surface)}
+  .fact{padding:30px 26px;border-right:1.5px solid var(--hair)}
+  .fact:last-child{border-right:0}
+  .fact .num{font-family:'Fraunces',serif;font-size:clamp(34px,5vw,52px);font-weight:600;line-height:1}
+  .fact .lab{font-family:'Space Mono',monospace;font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-top:10px}
+
+  /* sections */
+  section{padding:84px 0}
+  .sec-head{display:flex;align-items:baseline;gap:18px;margin-bottom:14px}
+  .sec-head .idx{font-family:'Space Mono',monospace;font-size:12px;color:var(--muted);letter-spacing:.14em}
+  h2{font-size:clamp(30px,5vw,52px)}
+  .sub{max-width:62ch;color:var(--soft);margin-top:18px;font-size:18px}
+
+  /* feature zigzag */
+  .feature{display:grid;grid-template-columns:1fr 1fr;gap:54px;align-items:center;margin-top:64px}
+  .feature.flip .copy{order:2}
+  .feature h3{font-family:'Fraunces',serif;font-weight:600;font-size:clamp(24px,3vw,34px);line-height:1.1;margin-bottom:16px}
+  .feature p{color:var(--soft);font-size:17px;max-width:48ch}
+  .tags{display:flex;flex-wrap:wrap;gap:8px;margin-top:22px}
+  .tag{font-family:'Space Mono',monospace;font-size:11px;text-transform:uppercase;letter-spacing:.08em;border:1.5px solid var(--ink);border-radius:999px;padding:6px 13px}
+
+  /* feature list (no-image) */
+  .grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:22px;margin-top:60px}
+  .card{border:2px solid var(--line);border-radius:var(--radius);padding:28px;background:var(--surface);transition:transform .16s ease,box-shadow .16s ease}
+  .card:hover{transform:translateY(-4px);box-shadow:8px 8px 0 var(--lime)}
+  .card .ico{width:38px;height:38px;border:1.5px solid var(--ink);border-radius:9px;display:grid;place-items:center;font-family:'Fraunces',serif;font-weight:600;margin-bottom:18px;background:var(--lime)}
+  .card h4{font-family:'Fraunces',serif;font-weight:600;font-size:21px;margin-bottom:9px}
+  .card p{color:var(--soft);font-size:15px}
+
+  /* architecture */
+  .arch{background:var(--ink);color:var(--paper);border-radius:var(--radius)}
+  .arch .wrap{padding:64px 28px}
+  .arch h2{color:var(--paper)}
+  .arch .sub{color:rgba(244,241,232,.7)}
+  .layers{display:grid;gap:14px;margin-top:46px;font-family:'Space Mono',monospace;font-size:14px}
+  .layer{border:1.5px solid rgba(244,241,232,.28);border-radius:12px;padding:20px 24px;display:flex;justify-content:space-between;align-items:center;gap:20px;flex-wrap:wrap}
+  .layer b{color:var(--lime);font-weight:700;letter-spacing:.06em}
+  .layer span{color:rgba(244,241,232,.62);text-align:right}
+
+  /* tech strip */
+  .tech{display:flex;flex-wrap:wrap;gap:12px;margin-top:42px}
+  .chip{border:1.5px solid var(--ink);border-radius:999px;padding:10px 18px;font-size:14px;font-weight:500;background:var(--surface)}
+
+  /* footer */
+  footer{border-top:3px solid var(--ink);padding:64px 0 80px;margin-top:30px}
+  .foot{display:flex;justify-content:space-between;align-items:flex-end;gap:30px;flex-wrap:wrap}
+  .foot .big{font-family:'Fraunces',serif;font-weight:600;font-size:clamp(28px,4vw,44px);line-height:1.05;max-width:16ch}
+  .foot-links{display:flex;gap:12px;flex-wrap:wrap}
+
+  @media(max-width:860px){
+    .facts{grid-template-columns:repeat(2,1fr)}
+    .fact:nth-child(2){border-right:0}
+    .fact{border-bottom:1.5px solid var(--hair)}
+    .feature{grid-template-columns:1fr;gap:30px}
+    .feature.flip .copy{order:0}
+    .grid3{grid-template-columns:1fr}
+    .shot{box-shadow:8px 8px 0 rgba(14,14,12,0.9)}
+    .layer span{text-align:left}
+  }
+</style>
+</head>
+<body>
+<header>
+  <div class="wrap nav">
+    <div class="brand">
+      <div class="logo">N</div>
+      <div>
+        <span class="k">E-STORE · JAVA</span>
+        <span class="n">Nile dot com</span>
+      </div>
+    </div>
+    <div class="nav-actions">
+      <a class="pill" href="#architecture">Architecture</a>
+      <a class="pill lime" href="https://github.com/eduardo-canelas/E-Store-Application" target="_blank" rel="noreferrer">View source ↗</a>
+    </div>
+  </div>
+</header>
+
+<main>
+  <!-- HERO -->
+  <section class="hero">
+    <div class="wrap">
+      <div class="kicker mono">Desktop application · Java 17 · Swing</div>
+      <h1 class="title serif">A class assignment,<br/>rebuilt as a <span class="mark">real</span><br/><em>application.</em></h1>
+      <p class="lede">Nile dot com is a Java Swing storefront — but the point isn't the window. It's the layered, unit-tested architecture underneath: pure domain logic, a repository-backed embedded SQLite store, natural-language catalogue search, and a custom-painted theming UI. Originally one 1,300-line file; now a production-shaped codebase.</p>
+      <div class="hero-cta">
+        <a class="btn solid" href="https://github.com/eduardo-canelas/E-Store-Application" target="_blank" rel="noreferrer">Read the code ↗</a>
+        <a class="btn ghost" href="#features">See what it does</a>
+        <span class="note">// runs on the desktop — these are real captures</span>
+      </div>
+    </div>
+    <div class="wrap hero-shot">
+      <figure class="shot">
+        <img src="./shots/results.png" alt="Nile dot com storefront — natural-language search, results list, and live shopping cart" />
+      </figure>
+      <figcaption>Catalogue search + live cart — light theme</figcaption>
+    </div>
+  </section>
+
+  <!-- FACTS -->
+  <div class="wrap">
+    <div class="facts">
+      <div class="fact"><div class="num">26</div><div class="lab">JUnit 5 tests</div></div>
+      <div class="fact"><div class="num">86.7%</div><div class="lab">Coverage · tested layers</div></div>
+      <div class="fact"><div class="num">61</div><div class="lab">Catalogue items</div></div>
+      <div class="fact"><div class="num">4</div><div class="lab">Architecture layers</div></div>
+    </div>
+  </div>
+
+  <!-- FEATURES -->
+  <section id="features">
+    <div class="wrap">
+      <div class="sec-head"><span class="idx">01</span><h2 class="serif">What it does</h2></div>
+      <p class="sub">Search the catalogue in plain language, build a cart with automatic bulk discounts, check out to an itemized receipt, and replay any past order — all backed by business rules that are tested in isolation from the UI.</p>
+
+      <div class="feature">
+        <div class="copy">
+          <h3>Checkout renders an inline receipt — no modal.</h3>
+          <p>Placing an order computes 6% sales tax, applies tiered bulk discounts, writes the order to SQLite, and appends to an audit log — then renders a perforated paper receipt in place. Export it as a PNG or send it to a printer.</p>
+          <div class="tags"><span class="tag">6% tax</span><span class="tag">PNG export</span><span class="tag">Printable</span><span class="tag">Audit log</span></div>
+        </div>
+        <figure class="shot"><img src="./shots/receipt.png" alt="Inline itemized receipt with tax, bulk discounts, and transaction id" /></figure>
+      </div>
+
+      <div class="feature flip">
+        <div class="copy">
+          <h3>One toggle flips the entire interface to dark.</h3>
+          <p>Every colour is a semantic design token, so light and dark are two readings of the same system — not a second stylesheet. The acid-lime accent and hard ink borders carry across both.</p>
+          <div class="tags"><span class="tag">Design tokens</span><span class="tag">Custom 2D painting</span><span class="tag">Zero UI deps</span></div>
+        </div>
+        <figure class="shot"><img src="./shots/dark.png" alt="The same storefront rendered in dark theme" /></figure>
+      </div>
+    </div>
+  </section>
+
+  <!-- CAPABILITY GRID -->
+  <section style="padding-top:0">
+    <div class="wrap">
+      <div class="grid3">
+        <div class="card"><div class="ico">⌕</div><h4>Natural-language search</h4><p>Type "cheap usb cable under $10" — a dependency-free parser extracts price bounds, a sort hint, and keyword terms, then filters the catalogue. Fully tested.</p></div>
+        <div class="card"><div class="ico">▤</div><h4>Repository over SQLite</h4><p>Inventory and orders sit behind interfaces backed by embedded SQLite. The CSV catalogue imports as a first-run seed; storage is swappable.</p></div>
+        <div class="card"><div class="ico">↺</div><h4>Replayable order history</h4><p>Every checkout is persisted and reopens from an in-app history view, reconstructed line-by-line from the database.</p></div>
+        <div class="card"><div class="ico">%</div><h4>Tiered bulk pricing</h4><p>Discounts apply by quantity automatically — 5+ → 10%, 10+ → 15%, 15+ → 20% — computed in the domain layer, not the UI.</p></div>
+        <div class="card"><div class="ico">✓</div><h4>Tested + CI</h4><p>JUnit 5 across domain, search, and persistence, with a JaCoCo coverage gate and GitHub Actions running on every push.</p></div>
+        <div class="card"><div class="ico">⬚</div><h4>Self-contained jar</h4><p>A Gradle fat-jar task produces a double-clickable runnable jar — no local Gradle install needed, wrapper committed.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ARCHITECTURE -->
+  <section class="arch" id="architecture">
+    <div class="wrap">
+      <div class="sec-head"><span class="idx" style="color:var(--lime)">02</span><h2 class="serif">The layering it only claimed to have before</h2></div>
+      <p class="sub">Business logic depends only on interfaces, so the rules are testable in isolation and the storage is swappable. The single-file original mixed all of this into one class.</p>
+      <div class="layers">
+        <div class="layer"><b>com.nilecom.domain</b><span>Product · Cart · CartItem · Order · Pricing — pure logic, no Swing, no SQL</span></div>
+        <div class="layer"><b>com.nilecom.search</b><span>NaturalLanguageSearch — query parsing + filtering</span></div>
+        <div class="layer"><b>com.nilecom.persistence</b><span>Repository interfaces · SQLite impls · CSV import · append-only audit log</span></div>
+        <div class="layer"><b>com.nilecom.ui</b><span>NileDotCom custom-painted storefront · Theme tokens (light/dark)</span></div>
+        <div class="layer"><b>com.nilecom.App</b><span>composition root — boots SQLite, seeds, wires repositories, launches UI</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TECH -->
+  <section>
+    <div class="wrap">
+      <div class="sec-head"><span class="idx">03</span><h2 class="serif">Built with</h2></div>
+      <div class="tech">
+        <span class="chip">Java 17</span>
+        <span class="chip">Swing (custom 2D painting)</span>
+        <span class="chip">SQLite · xerial sqlite-jdbc</span>
+        <span class="chip">Gradle</span>
+        <span class="chip">JUnit 5</span>
+        <span class="chip">JaCoCo</span>
+        <span class="chip">GitHub Actions</span>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap foot">
+    <div class="big serif">From one file to a tested, layered application.</div>
+    <div class="foot-links">
+      <a class="btn solid" href="https://github.com/eduardo-canelas/E-Store-Application" target="_blank" rel="noreferrer">Source on GitHub ↗</a>
+      <a class="btn ghost" href="https://github.com/eduardo-canelas" target="_blank" rel="noreferrer">More work ↗</a>
+    </div>
+  </div>
+</footer>
+</body>
+</html>
