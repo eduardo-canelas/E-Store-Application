@@ -1,0 +1,461 @@
+{
+  "directed": false,
+  "multigraph": false,
+  "graph": {},
+  "nodes": [
+    {
+      "label": "NileDotCom.java",
+      "file_type": "code",
+      "source_file": "NileDotCom.java",
+      "source_location": "L1",
+      "id": "niledotcom_java",
+      "community": 0,
+      "norm_label": "niledotcom.java"
+    },
+    {
+      "label": "NileDotCom",
+      "file_type": "code",
+      "source_file": "NileDotCom.java",
+      "source_location": "L21",
+      "id": "e_store_application_niledotcom_niledotcom",
+      "community": 0,
+      "norm_label": "niledotcom"
+    },
+    {
+      "label": "JFrame",
+      "file_type": "code",
+      "source_file": "",
+      "source_location": "",
+      "id": "jframe",
+      "community": 0,
+      "norm_label": "jframe"
+    },
+    {
+      "label": ".NileDotCom()",
+      "file_type": "code",
+      "source_file": "NileDotCom.java",
+      "source_location": "L32",
+      "id": "e_store_application_niledotcom_niledotcom_niledotcom",
+      "community": 0,
+      "norm_label": ".niledotcom()"
+    },
+    {
+      "label": ".setupListeners()",
+      "file_type": "code",
+      "source_file": "NileDotCom.java",
+      "source_location": "L210",
+      "id": "e_store_application_niledotcom_niledotcom_setuplisteners",
+      "community": 0,
+      "norm_label": ".setuplisteners()"
+    },
+    {
+      "label": ".loadInventory()",
+      "file_type": "code",
+      "source_file": "NileDotCom.java",
+      "source_location": "L312",
+      "id": "e_store_application_niledotcom_niledotcom_loadinventory",
+      "community": 0,
+      "norm_label": ".loadinventory()"
+    },
+    {
+      "label": ".createStyledButton()",
+      "file_type": "code",
+      "source_file": "NileDotCom.java",
+      "source_location": "L329",
+      "id": "e_store_application_niledotcom_niledotcom_createstyledbutton",
+      "community": 0,
+      "norm_label": ".createstyledbutton()"
+    },
+    {
+      "label": ".main()",
+      "file_type": "code",
+      "source_file": "NileDotCom.java",
+      "source_location": "L360",
+      "id": "e_store_application_niledotcom_niledotcom_main",
+      "community": 0,
+      "norm_label": ".main()"
+    },
+    {
+      "label": "run.sh",
+      "file_type": "code",
+      "source_file": "run.sh",
+      "source_location": "L1",
+      "id": "run_sh",
+      "community": 3,
+      "norm_label": "run.sh"
+    },
+    {
+      "label": "FileReaderTest.java",
+      "file_type": "code",
+      "source_file": "FileReaderTest.java",
+      "source_location": "L1",
+      "id": "filereadertest_java",
+      "community": 2,
+      "norm_label": "filereadertest.java"
+    },
+    {
+      "label": "FileReaderTest",
+      "file_type": "code",
+      "source_file": "FileReaderTest.java",
+      "source_location": "L10",
+      "id": "e_store_application_filereadertest_filereadertest",
+      "community": 2,
+      "norm_label": "filereadertest"
+    },
+    {
+      "label": ".readInventoryFile()",
+      "file_type": "code",
+      "source_file": "FileReaderTest.java",
+      "source_location": "L11",
+      "id": "e_store_application_filereadertest_filereadertest_readinventoryfile",
+      "community": 2,
+      "norm_label": ".readinventoryfile()"
+    },
+    {
+      "label": ".main()",
+      "file_type": "code",
+      "source_file": "FileReaderTest.java",
+      "source_location": "L22",
+      "id": "e_store_application_filereadertest_filereadertest_main",
+      "community": 2,
+      "norm_label": ".main()"
+    },
+    {
+      "label": "NileDotCom Constructor",
+      "file_type": "code",
+      "source_file": "NileDotCom.java",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": "Eduardo Canelas",
+      "contributor": null,
+      "id": "niledotcom_niledotcom",
+      "community": 1,
+      "norm_label": "niledotcom constructor"
+    },
+    {
+      "label": "loadInventory Method",
+      "file_type": "code",
+      "source_file": "NileDotCom.java",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": "Eduardo Canelas",
+      "contributor": null,
+      "id": "niledotcom_loadinventory",
+      "community": 1,
+      "norm_label": "loadinventory method"
+    },
+    {
+      "label": "setupListeners Method",
+      "file_type": "code",
+      "source_file": "NileDotCom.java",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": "Eduardo Canelas",
+      "contributor": null,
+      "id": "niledotcom_setuplisteners",
+      "community": 1,
+      "norm_label": "setuplisteners method"
+    },
+    {
+      "label": "createStyledButton Method",
+      "file_type": "code",
+      "source_file": "NileDotCom.java",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": "Eduardo Canelas",
+      "contributor": null,
+      "id": "niledotcom_createstyledbutton",
+      "community": 1,
+      "norm_label": "createstyledbutton method"
+    },
+    {
+      "label": "NileDotCom main Method",
+      "file_type": "code",
+      "source_file": "NileDotCom.java",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": "Eduardo Canelas",
+      "contributor": null,
+      "id": "niledotcom_main",
+      "community": 1,
+      "norm_label": "niledotcom main method"
+    },
+    {
+      "label": "readInventoryFile Method",
+      "file_type": "code",
+      "source_file": "FileReaderTest.java",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": "Eduardo Canelas",
+      "contributor": null,
+      "id": "filereadertest_readinventoryfile",
+      "community": 1,
+      "norm_label": "readinventoryfile method"
+    },
+    {
+      "label": "FileReaderTest main Method",
+      "file_type": "code",
+      "source_file": "FileReaderTest.java",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": "Eduardo Canelas",
+      "contributor": null,
+      "id": "filereadertest_main",
+      "community": 4,
+      "norm_label": "filereadertest main method"
+    },
+    {
+      "label": "Launcher Script",
+      "file_type": "code",
+      "source_file": "run.sh",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": "Eduardo Canelas",
+      "contributor": null,
+      "id": "run_script",
+      "community": 1,
+      "norm_label": "launcher script"
+    },
+    {
+      "label": "Nile Dot Com Overview",
+      "file_type": "document",
+      "source_file": "README.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": "Eduardo Canelas",
+      "contributor": null,
+      "id": "readme_overview",
+      "community": 5,
+      "norm_label": "nile dot com overview"
+    },
+    {
+      "label": "MVC Architecture Design",
+      "file_type": "concept",
+      "source_file": "README.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": "Eduardo Canelas",
+      "contributor": null,
+      "id": "readme_mvc_architecture",
+      "community": 1,
+      "norm_label": "mvc architecture design"
+    }
+  ],
+  "links": [
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "NileDotCom.java",
+      "source_location": "L21",
+      "weight": 1.0,
+      "source": "niledotcom_java",
+      "target": "e_store_application_niledotcom_niledotcom",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "extends",
+      "confidence": "EXTRACTED",
+      "source_file": "NileDotCom.java",
+      "source_location": "L21",
+      "weight": 1.0,
+      "source": "e_store_application_niledotcom_niledotcom",
+      "target": "jframe",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "NileDotCom.java",
+      "source_location": "L32",
+      "weight": 1.0,
+      "source": "e_store_application_niledotcom_niledotcom",
+      "target": "e_store_application_niledotcom_niledotcom_niledotcom",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "NileDotCom.java",
+      "source_location": "L210",
+      "weight": 1.0,
+      "source": "e_store_application_niledotcom_niledotcom",
+      "target": "e_store_application_niledotcom_niledotcom_setuplisteners",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "NileDotCom.java",
+      "source_location": "L312",
+      "weight": 1.0,
+      "source": "e_store_application_niledotcom_niledotcom",
+      "target": "e_store_application_niledotcom_niledotcom_loadinventory",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "NileDotCom.java",
+      "source_location": "L329",
+      "weight": 1.0,
+      "source": "e_store_application_niledotcom_niledotcom",
+      "target": "e_store_application_niledotcom_niledotcom_createstyledbutton",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "NileDotCom.java",
+      "source_location": "L360",
+      "weight": 1.0,
+      "source": "e_store_application_niledotcom_niledotcom",
+      "target": "e_store_application_niledotcom_niledotcom_main",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "NileDotCom.java",
+      "source_location": "L56",
+      "weight": 1.0,
+      "source": "e_store_application_niledotcom_niledotcom_niledotcom",
+      "target": "e_store_application_niledotcom_niledotcom_loadinventory",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "NileDotCom.java",
+      "source_location": "L187",
+      "weight": 1.0,
+      "source": "e_store_application_niledotcom_niledotcom_niledotcom",
+      "target": "e_store_application_niledotcom_niledotcom_createstyledbutton",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "NileDotCom.java",
+      "source_location": "L207",
+      "weight": 1.0,
+      "source": "e_store_application_niledotcom_niledotcom_niledotcom",
+      "target": "e_store_application_niledotcom_niledotcom_setuplisteners",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "FileReaderTest.java",
+      "source_location": "L10",
+      "weight": 1.0,
+      "source": "filereadertest_java",
+      "target": "e_store_application_filereadertest_filereadertest",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "FileReaderTest.java",
+      "source_location": "L11",
+      "weight": 1.0,
+      "source": "e_store_application_filereadertest_filereadertest",
+      "target": "e_store_application_filereadertest_filereadertest_readinventoryfile",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "FileReaderTest.java",
+      "source_location": "L22",
+      "weight": 1.0,
+      "source": "e_store_application_filereadertest_filereadertest",
+      "target": "e_store_application_filereadertest_filereadertest_main",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "NileDotCom.java",
+      "source_location": null,
+      "weight": 1.0,
+      "source": "niledotcom_niledotcom",
+      "target": "niledotcom_loadinventory"
+    },
+    {
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "NileDotCom.java",
+      "source_location": null,
+      "weight": 1.0,
+      "source": "niledotcom_niledotcom",
+      "target": "niledotcom_createstyledbutton"
+    },
+    {
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "NileDotCom.java",
+      "source_location": null,
+      "weight": 1.0,
+      "source": "niledotcom_niledotcom",
+      "target": "niledotcom_setuplisteners"
+    },
+    {
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "NileDotCom.java",
+      "source_location": null,
+      "weight": 1.0,
+      "source": "niledotcom_main",
+      "target": "niledotcom_niledotcom"
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "README.md",
+      "source_location": null,
+      "weight": 1.0,
+      "source": "readme_mvc_architecture",
+      "target": "niledotcom_niledotcom"
+    },
+    {
+      "relation": "semantically_similar_to",
+      "confidence": "INFERRED",
+      "confidence_score": 0.85,
+      "source_file": "FileReaderTest.java",
+      "source_location": null,
+      "weight": 1.0,
+      "source": "filereadertest_readinventoryfile",
+      "target": "niledotcom_loadinventory"
+    },
+    {
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "run.sh",
+      "source_location": null,
+      "weight": 1.0,
+      "source": "run_script",
+      "target": "niledotcom_main"
+    }
+  ],
+  "hyperedges": [],
+  "built_at_commit": "00b62b2c95b58fcfe538b5722e3b80b9d871b630"
+}
